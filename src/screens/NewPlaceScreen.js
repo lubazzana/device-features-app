@@ -2,8 +2,9 @@ import { Button, ScrollView, StyleSheet, Text, TextInput, View } from "react-nat
 import React, { useState } from "react";
 
 import ImageSelector from "../components/ImageSelector";
-import { addPlace } from "../store/place.slice";
+import LocationSelector from "../components/LocationSelector";
 import colors from "../utils/colors";
+import { savePlace } from "../store/place.slice";
 import { useDispatch } from "react-redux";
 
 const styles = StyleSheet.create({
@@ -16,7 +17,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    marginBottom: 20
+    marginBottom: 20,
+    color: colors.primary,
   },
   input: {
     borderBottomColor: colors.primary,
@@ -29,22 +31,29 @@ const styles = StyleSheet.create({
 const NewPlaceScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
+  const [image, setImage] = useState("");
+  const [location, setLocation] = useState({});
 
   const onHandleTitleChange = (text) => setTitle(text);
   const onHandleSubmit = () => {
-    dispatch(addPlace(title));
+    dispatch(savePlace(title, image, location));
     navigation.navigate("Place");
   }
+
+  const onHandleImageSelect = (imageUrl) => setImage(imageUrl);
+
+  const onHandleLocationSelect = (location) => setLocation(location);
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Título</Text>
-        <TextInput style={styles.input} placeholder="Nueva ubicación"  onChangeText={onHandleTitleChange} value={title}/>
-        <ImageSelector onImage={(image) => console.log(image)} />
+        <TextInput style={styles.input} placeholder="Nueva ubicacion"  onChangeText={onHandleTitleChange} value={title}/>
+        <ImageSelector onImage={onHandleImageSelect} />
+        <LocationSelector onLocation={onHandleLocationSelect}/>
         <Button 
           title="Grabar Direccion"
-          color={colors.primary}
+          color={colors.secondary}
           onPress={onHandleSubmit}
         />
       </View>

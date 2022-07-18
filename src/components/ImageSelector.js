@@ -25,19 +25,20 @@ const styles = StyleSheet.create({
     },
 });
 
+
 const ImageSelector = ({ onImage }) => {
     const [pickedUrl, setPickedUrl] = useState("");
+
 
     const verifyPermissions = async () => {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
         if(status !== "granted") {
-            Alert.alert("Permisos insuficientes", "Necesitas para utilizar la cámara", [{ text: "Aceptar"}]);
+            Alert.alert("Permisos insuficientes", "Necesitas permisos para usar la cámara", [{ text: "Ok" }]);
             return false;
         }
         return true;
     }
-
     const handleTakeImage = async () => {
         const isCameraPermissionGranted = await verifyPermissions();
 
@@ -51,18 +52,18 @@ const ImageSelector = ({ onImage }) => {
 
         setPickedUrl(image.uri);
         onImage(image.uri);
-    }
 
-    return(
+    }
+    return (
         <View style={styles.container}>
             <View style={styles.preview}>
                 {!pickedUrl ? (
-                    <Text>No hay una imagen seleccionada</Text>
+                    <Text>No se ha seleccionado ninguna imagen</Text>
                 ) : (
                     <Image source={{ uri: pickedUrl }} style={styles.image} />
                 )}
             </View>
-            <Button
+            <Button 
                 title="Tomar foto"
                 color={colors.primary}
                 onPress={handleTakeImage}
