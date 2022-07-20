@@ -1,8 +1,9 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import PlaceItem from "../components/PlaceItem";
-import React from "react";
-import { useSelector } from "react-redux";
+import { loadPlaces } from "../store/place.slice";
 
 const styles = StyleSheet.create({
   container: {
@@ -16,7 +17,12 @@ const styles = StyleSheet.create({
 });
 
 const PlaceListScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const places = useSelector((state) => state.place.places);
+
+  useEffect(() => {
+    dispatch(loadPlaces());
+  }, []);
 
   const onSelectPlace = (id) => {
     navigation.navigate("PlaceDetail", { placeId: id });
